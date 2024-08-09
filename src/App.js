@@ -1,9 +1,7 @@
+import Body from './components/Body.js'
+
 function App() {
-  return (
-    <div className="App">
-      <h1 className="bg-orange-700">Konnichwa minnasan, gptflix wa tsukurimashou !</h1>
-    </div>
-  );
+  return (<Body/>);
 }
 
 export default App;
