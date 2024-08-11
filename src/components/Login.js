@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validateForm";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom"
 import { addUser } from "../redux/userSlice"
 import {
   createUserWithEmailAndPassword,
@@ -10,9 +9,9 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
+import { BACKGROUND_IMG, PHOTO_URL } from "../utils/constants";
 
 const Login = () => {
-  const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState([]);
   const email = useRef(null);
@@ -37,9 +36,6 @@ const Login = () => {
     if (isSignIn) {
       signInWithEmailAndPassword(auth, emailValue, passwordValue)
         .then((userCredential) => {
-          const user = userCredential.user;
-          console.log(user, "user");
-            navigate('/browse');
           })
         .catch((error) => {
           const errorMessage = error.message;
@@ -49,16 +45,13 @@ const Login = () => {
       createUserWithEmailAndPassword(auth, emailValue, passwordValue)
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user, "user");
           updateProfile(auth.currentUser, {
-            displayName: nameValue, photoURL: "https://avatars.githubusercontent.com/u/100661470?v=4"
+            displayName: nameValue, photoURL: PHOTO_URL
           }).then(() => {
             const {uid, email, displayName, photoURL} = auth.currentUser;
             dispatch(addUser({uid: uid, email: email, displayName: displayName,photoURL: photoURL}));
-            navigate('/browse');
           }).catch((error) => {
             setErrorMessage([error.message]);
-            navigate('/error');
           });
         })
         .catch((error) => {
@@ -74,7 +67,7 @@ const Login = () => {
       <div className="absolute inset-0">
         <img
           className="w-full h-full object-cover"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/b2c3e95b-b7b5-4bb7-a883-f4bfc7472fb7/19fc1a4c-82db-4481-ad08-3a1dffbb8c39/IN-en-20240805-POP_SIGNUP_TWO_WEEKS-perspective_WEB_24a485f6-1820-42be-9b60-1b066f1eb869_large.jpg"
+          src={BACKGROUND_IMG}
           alt="background-image"
         />
       </div>
